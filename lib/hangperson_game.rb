@@ -7,9 +7,55 @@ class HangpersonGame
 
   # def initialize()
   # end
-  
+  attr_accessor :word, :guesses, :wrong_guesses
   def initialize(word)
     @word = word
+    @guesses = ''
+    @wrong_guesses = ''
+  end
+
+  def guess str
+    if str.nil?
+      raise ArgumentError, "guess must not be nil"
+    end
+    unless /\w/.match str
+      raise ArgumentError, "guess must be a letter"
+    end
+    str = str.downcase
+    if @word.include? str
+      unless @guesses.include? str
+        guesses << str
+        return true
+      end
+      return false
+    end
+    unless @wrong_guesses.include? str
+      wrong_guesses << str
+      return true
+    end
+    return false
+  end
+
+  def word_with_guesses
+    temp_word = ''
+    @word.each_char do |letter|
+      if guesses.include? letter
+        temp_word << letter
+      else
+        temp_word << '-'
+      end
+    end
+    return temp_word
+  end
+
+  def check_win_or_lose
+    if @wrong_guesses.length == 7
+      return :lose
+    elsif !word_with_guesses.include? '-'
+      return :win
+    else
+      return :play
+    end
   end
 
   # You can test it by running $ bundle exec irb -I. -r app.rb
