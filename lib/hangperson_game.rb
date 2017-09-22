@@ -15,13 +15,8 @@ class HangpersonGame
   end
 
   def guess str
-    if str.nil?
-      raise ArgumentError, "guess must not be nil"
-    end
-    unless /\w/.match str
-      raise ArgumentError, "guess must be a letter"
-    end
-    str = str.downcase
+    raise ArgumentError unless /\w/.match(str) && str.length > 0
+    str.downcase!
     if @word.include? str
       unless @guesses.include? str
         guesses << str
